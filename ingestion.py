@@ -26,7 +26,20 @@ tavily_map = TavilyMap(max_depth=5, max_breadth=20, max_pages=1000)  # Tavily �
 tavily_crawl = TavilyCrawl()  # Tavily 웹 크롤러 객체 생성
 
 async def main():  # 비동기 메인 함수 정의
-    print("Hello, world!")  # 테스트 메시지 출력
+    """"Main async function to orchestrate the entire process."""
+    print("main함수 실행")
+    log_header("DOCUMENTATION INGESTION PIPELINE")
+
+    log_info("TavilyCrawl: Starting to Crawl documentation from https://python.langchain.com/", Colors.PURPLE)
+
+    res = tavily_crawl.invoke({
+      "url": "https://python.langchain.com/",
+      "max_depth": 1,
+      "extract_depth": "advanced",
+      # "instructions": "content on ai agents"
+    })
+    all_docs = [Document(page_content=result["raw_content"], metadata={"source": result["url"]}) for result in res["results"]]
+    log_success(f"TavilyCrawl: Crawled {len(all_docs)} pages")
 
 if __name__ == "__main__":  # 스크립트가 직접 실행될 때만 main() 함수 실행
     asyncio.run(main())  # 비동기 main() 함수를 실행
