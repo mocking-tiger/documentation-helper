@@ -2,6 +2,94 @@ from backend.core import run_llm  # RAG 기능을 수행하는 run_llm 함수 �
 import streamlit as st  # Streamlit 웹 앱 프레임워크 임포트
 from typing import Set  # 타입 힌팅용 Set 타입 임포트
 
+# 커스텀 CSS 스타일 적용 (LangChain 문서 스타일)
+st.markdown("""
+    <style>
+    /* 헤더 스타일 */
+    h1, h2, h3 {
+        color: #1F2937;
+        font-weight: 600;
+    }
+    
+    /* 입력 필드 스타일 */
+    .stTextInput > div > div > input {
+        border-radius: 8px;
+        border: 1px solid #E5E7EB;
+    }
+    
+    /* 버튼 스타일 */
+    .stButton > button {
+        background-color: #1D9A9A;
+        color: white;
+        border-radius: 8px;
+        border: none;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+    }
+    
+    .stButton > button:hover {
+        background-color: #178B8B;
+    }
+    
+    /* 사이드바 스타일 */
+    [data-testid="stSidebar"] {
+        background-color: #F9FAFB;
+    }
+    
+    /* 채팅 메시지 스타일 */
+    .stChatMessage {
+        border-radius: 8px;
+        padding: 1rem;
+    }
+    
+    /* 링크 색상 */
+    a {
+        color: #1D9A9A;
+        text-decoration: none;
+    }
+    
+    a:hover {
+        color: #178B8B;
+        text-decoration: underline;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# 사이드바에 사용자 정보 추가
+st.sidebar.title("사용자 프로필")
+
+# 프로필 사진 업로드
+profile_image = st.sidebar.file_uploader("프로필 사진", type=["jpg", "jpeg", "png"])
+if profile_image is not None:
+    st.sidebar.image(profile_image, width=150)
+else:
+    # 기본 프로필 아이콘 표시 (이모지 사용)
+    st.sidebar.markdown(
+        """
+        <div style="text-align: center; font-size: 100px; margin: 20px 0;">
+            👤
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# 사용자 이름 입력
+user_name = st.sidebar.text_input("이름", placeholder="이름을 입력하세요", value="")
+
+# 사용자 이메일 입력
+user_email = st.sidebar.text_input("이메일", placeholder="example@email.com", value="")
+
+# 입력된 정보 표시
+if user_name or user_email:
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("### 프로필 정보")
+    if user_name:
+        st.sidebar.write(f"**이름:** {user_name}")
+    if user_email:
+        st.sidebar.write(f"**이메일:** {user_email}")
+
+st.sidebar.markdown("---")
+
 st.header("LangChain Documentation Helper Bot")  # 앱 헤더 표시
 
 prompt = st.text_input("Prompt", placeholder="Enter your question here...")  # 사용자 입력을 받는 텍스트 입력 필드 생성
