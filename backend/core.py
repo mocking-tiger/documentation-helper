@@ -11,7 +11,7 @@ from langchain_pinecone import PineconeVectorStore
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 
 
-INDEX_NAME = "langchain-doc-index"
+INDEX_NAME = "langchain-docs-2025"
 
 
 def run_llm(query: str):
