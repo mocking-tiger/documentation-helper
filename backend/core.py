@@ -30,9 +30,17 @@ def run_llm(query: str):
     # 질문을 입력하여 RAG 체인 실행 (검색 → 증강 → 생성)
     result = qa.invoke({"input": query})
 
+    new_result = {
+      "query": result["input"],
+      "result": result["answer"],
+      "source_documents": result["context"],
+    }
+
     # 결과 반환 (input, context, answer 포함)
-    return result
+    return new_result
 
 if __name__ == "__main__":
   res = run_llm(query="What is a LangChain Chain?")
-  print(res)
+  print('='*60)
+  print(res["result"])
+  print('='*60)
